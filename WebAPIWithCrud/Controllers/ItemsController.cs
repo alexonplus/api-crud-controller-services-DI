@@ -53,4 +53,17 @@ public class ItemsController : ControllerBase
             return NotFound();
         return NoContent();
     }
+
+    [HttpPatch("{id:int}")]
+    public ActionResult Patch(int id, [FromBody] ItemPatchDto patch)
+    {
+        if (!_itemsService.Patch(id, patch.Name))
+            return NotFound();
+        return NoContent();
+    }
+}
+
+public class ItemPatchDto
+{
+    public string? Name { get; set; }
 }

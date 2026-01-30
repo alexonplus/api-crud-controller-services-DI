@@ -62,4 +62,16 @@ public class ItemsService
         }
         return false;
     }
+
+    public bool Patch(int id, string? name)
+    {
+        var item = GetById(id);
+        if (item == null)
+            return false;
+
+        if (name != null)
+            item.Name = name;
+
+        return true;
+    }
 }
