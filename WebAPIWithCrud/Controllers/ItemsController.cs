@@ -15,12 +15,25 @@ public class ItemsController : ControllerBase
         _itemsService = itemsService;
     }
 
+    //Gammal get, utan Query parameter
+    //[HttpGet]
+    //public ActionResult<IEnumerable<Items>> GetAll()
+    //{
+    //    return Ok(_itemsService.GetAll());
+    //}
+
     [HttpGet]
-    public ActionResult<IEnumerable<Items>> GetAll()
+    public ActionResult<IEnumerable<Items>> Get([FromQuery] string? name)
     {
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            var item = _itemsService.GetByName(name);
+            if (item == null) return NotFound();
+            return Ok(new[] { item }); // eller Ok(item) om du vill returnera en Item
+        }
+
         return Ok(_itemsService.GetAll());
     }
-
 
     [HttpGet("{id:int}")]
     public ActionResult<Items> Get(int id)
@@ -31,14 +44,6 @@ public class ItemsController : ControllerBase
         return Ok(item);
     }
 
-    [HttpGet("by-name")]
-    public ActionResult<Items> GetByName([FromQuery] string name)
-    {
-        var item = _itemsService.GetByName(name);
-        if (item == null)
-            return NotFound();
-        return Ok(item);
-    }
 
     [HttpPost]
     public ActionResult<Items> Create(Items item)
