@@ -57,6 +57,7 @@ public class ItemsService
             return false;
 
         existingItem.Name = item.Name;
+        existingItem.Description = item.Description;
         return true;
     }
 
