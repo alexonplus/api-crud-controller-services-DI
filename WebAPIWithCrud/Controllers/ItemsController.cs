@@ -5,7 +5,7 @@ using WebAPIWithCrud.Services;
 namespace WebAPIWithCrud.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/items")]
 public class ItemsController : ControllerBase
 {
     private readonly ItemsService _itemsService;
@@ -26,6 +26,15 @@ public class ItemsController : ControllerBase
     public ActionResult<Items> Get(int id)
     {
         var item = _itemsService.GetById(id);
+        if (item == null)
+            return NotFound();
+        return Ok(item);
+    }
+
+    [HttpGet("by-name")]
+    public ActionResult<Items> GetByName([FromQuery] string name)
+    {
+        var item = _itemsService.GetByName(name);
         if (item == null)
             return NotFound();
         return Ok(item);
@@ -54,16 +63,4 @@ public class ItemsController : ControllerBase
         return NoContent();
     }
 
-    [HttpPatch("{id:int}")]
-    public ActionResult Patch(int id, [FromBody] ItemPatchDto patch)
-    {
-        if (!_itemsService.Patch(id, patch.Name))
-            return NotFound();
-        return NoContent();
-    }
-}
-
-public class ItemPatchDto
-{
-    public string? Name { get; set; }
 }

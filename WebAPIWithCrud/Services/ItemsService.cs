@@ -22,6 +22,16 @@ public class ItemsService
         return null;
     }
 
+    public Items? GetByName(string name)
+    {
+        foreach (var item in _items)
+        {
+            if (item.Name == name)
+                return item;
+        }
+        return null;
+    }
+
     public Items Create(Items item)
     {
         item.Id = _nextId;
@@ -63,15 +73,4 @@ public class ItemsService
         return false;
     }
 
-    public bool Patch(int id, string? name)
-    {
-        var item = GetById(id);
-        if (item == null)
-            return false;
-
-        if (name != null)
-            item.Name = name;
-
-        return true;
-    }
 }
