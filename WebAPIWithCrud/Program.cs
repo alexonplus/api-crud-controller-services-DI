@@ -1,4 +1,7 @@
 using WebAPIWithCrud.Services;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using WebAPIWithCrud;
 
 namespace WebAPIWithCrud
 {
@@ -14,6 +17,11 @@ namespace WebAPIWithCrud
             builder.Services.AddSingleton<ItemsService>();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            builder.Services.AddValidatorsFromAssemblyContaining<ItemsValidator>();
+          
+            builder.Services.AddControllers()
+                            .AddFluentValidation(v => v.RegisterValidatorsFromAssemblyContaining<ItemsValidator>());
 
             var app = builder.Build();
 
